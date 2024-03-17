@@ -183,7 +183,7 @@ function create_initscripts() {
   ${INIT_CMD} stop nginx
   echo "# Setting up nginx to ${SETUP_NGINX_FILE}"
   # Always use the latest nginx config; important if new headers are added / needed for security
-  cp ${APP_HOME}/docker/production/nginx.prod.conf ${SETUP_NGINX_FILE}
+  cp ${APP_HOME}/contrib/packager.io/nginx.prod.conf ${SETUP_NGINX_FILE}
   sed -i s/inventree-server:8000/localhost:6000/g ${SETUP_NGINX_FILE}
   sed -i s=var/www=opt/inventree/data=g ${SETUP_NGINX_FILE}
   # Start nginx
@@ -236,7 +236,7 @@ function update_or_install() {
   # Run update as app user
   echo "# Updating InvenTree"
   sudo -u ${APP_USER} --preserve-env=$SETUP_ENVS bash -c "cd ${APP_HOME} && pip install wheel"
-  sudo -u ${APP_USER} --preserve-env=$SETUP_ENVS bash -c "cd ${APP_HOME} && invoke update --no-frontend | sed -e 's/^/# inv update| /;'"
+  sudo -u ${APP_USER} --preserve-env=$SETUP_ENVS bash -c "cd ${APP_HOME} && invoke update | sed -e 's/^/# inv update| /;'"
 
   # Make sure permissions are correct again
   echo "# Set permissions for data dir and media: ${DATA_DIR}"

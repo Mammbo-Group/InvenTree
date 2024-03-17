@@ -7,13 +7,14 @@ import {
   IconUserBolt,
   IconUserCog
 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { doClassicLogout } from '../../functions/auth';
+import { doLogout } from '../../functions/auth';
 import { InvenTreeStyle } from '../../globalStyle';
 import { useUserState } from '../../states/UserState';
 
 export function MainMenu() {
+  const navigate = useNavigate();
   const { classes, theme } = InvenTreeStyle();
   const userState = useUserState();
 
@@ -34,15 +35,6 @@ export function MainMenu() {
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
-        {userState.user?.is_staff && (
-          <Menu.Item
-            icon={<IconUserBolt />}
-            component={Link}
-            to="/settings/admin"
-          >
-            <Trans>Admin Center</Trans>
-          </Menu.Item>
-        )}
         <Menu.Label>
           <Trans>Settings</Trans>
         </Menu.Label>
@@ -58,12 +50,21 @@ export function MainMenu() {
             <Trans>System Settings</Trans>
           </Menu.Item>
         )}
+        {userState.user?.is_staff && <Menu.Divider />}
+        {userState.user?.is_staff && (
+          <Menu.Item
+            icon={<IconUserBolt />}
+            component={Link}
+            to="/settings/admin"
+          >
+            <Trans>Admin Center</Trans>
+          </Menu.Item>
+        )}
         <Menu.Divider />
-
         <Menu.Item
           icon={<IconLogout />}
           onClick={() => {
-            doClassicLogout();
+            doLogout(navigate);
           }}
         >
           <Trans>Logout</Trans>
